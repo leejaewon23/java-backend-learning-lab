@@ -73,6 +73,23 @@ public class Main {
         ic.methodB();
         ic.methodC();
 
+        //연습문제 5번
+        Remocon r = new TV();
+        r.powerOn();
+
+        //연습문제 6번
+        SoundableExample.printSound(new Cat());
+        SoundableExample.printSound(new Dog());
+
+        //연습문제 7번
+        DataAccessObject.dbWork(new OracleDao());
+        DataAccessObject.dbWork(new MySqlDao());
+
+        //연습문제 8번
+        Example.action(new B());
+        Example.action(new C());
+
+
 
 
 
