@@ -123,7 +123,17 @@ public class Main {
         // 상황 3: 주인이 정상 시간에 면회 올 때
         myPatient.checkVisitation("이재원", 17);
 
-
-
+        //2번 문제 상속
+        CatPatient c1 = new CatPatient("나비",
+                "고양이",
+                "C-001",
+                "25-12-11",
+                "26-01-30",
+                "김닥터",
+                "이재원",
+                0);
+        c1.checkVisitation("이재원", 20);
     }
+
+
 }
