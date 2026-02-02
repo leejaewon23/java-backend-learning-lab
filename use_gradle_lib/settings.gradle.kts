@@ -1,0 +1,1 @@
+rootProject.name = "use_gradle_lib"
