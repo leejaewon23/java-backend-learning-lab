@@ -71,6 +71,25 @@ public class Main {
         PrintAnnotationExample p2 = new PrintAnnotationExample();
         p2.annotation();
 
+        //확인문제 5번
+        
+        //Student를 저장하는 HashSet 생성
+        HashSet<Student> hashSet = new HashSet<Student>();
+
+        //Student 저장
+        hashSet.add(new Student("1"));
+        hashSet.add(new Student("1"));
+        hashSet.add(new Student("2"));
+
+        //저장된 Student 수 출력
+        System.out.println("저장된 Student 수: " + hashSet.size());
+
+        //확인문제 6번
+        Member member = new Member("blue", "이파란");
+        System.out.println(member);
+
+
+
 
 
 
