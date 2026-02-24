@@ -72,7 +72,7 @@ public class Main {
         p2.annotation();
 
         //확인문제 5번
-        
+
         //Student를 저장하는 HashSet 생성
         HashSet<Student> hashSet = new HashSet<Student>();
 
@@ -87,6 +87,8 @@ public class Main {
         //확인문제 6번
         Member member = new Member("blue", "이파란");
         System.out.println(member);
+
+
 
 
 
