@@ -498,6 +498,32 @@ public class Main {
         String[] arr =  {"A", "B", "C"};
         List<String> immutablelist3 = Arrays.asList(arr);
 
+        //확인문제 7번
+        BoardDao dao = new BoardDao();
+        List<Board1> list5 = dao.getBoardList();
+
+        list5.add(new Board1("제목1", "내용1"));
+        list5.add(new Board1("제목2", "내용2"));
+        list5.add(new Board1("제목3", "내용3"));
+        for(Board1 board1 : list5) {
+            System.out.println(board1.getTitle() + "-" + board1.getContent());
+        }
+
+        //확인문제 8번
+        Set<Student> set4 = new HashSet<Student>();
+
+        set4.add(new Student(1, "홍길동"));
+        set4.add(new Student(2, "신용권"));
+        set4.add(new Student(1, "조민우"));
+
+        System.out.println("저장된 객체 수: " + set4.size());
+        for(Student s : set4) {
+            System.out.println(s.studentNum + "-" + s.name);
+        }
+
+
+
+
 
 
 
