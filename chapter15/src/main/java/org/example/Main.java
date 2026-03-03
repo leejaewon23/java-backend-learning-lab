@@ -246,8 +246,8 @@ public class Main {
         System.out.println();
 
 
-        Properties properties = new Properties();
-
+//        Properties properties = new Properties();
+//
 //        // 1. try-with-resources 문법을 사용하여 스트림을 자동으로 닫아줍니다.
 //        // 2. 경로 앞에 "/"를 붙여서 프로젝트 루트(resources)부터 찾습니다.
 //        try (InputStream is = Main.class.getResourceAsStream("database.properties")) {
@@ -272,7 +272,7 @@ public class Main {
 //            System.out.println("username: " + username);
 //            System.out.println("password: " + password);
 //            System.out.println("admin: " + admin);
-//
+
 //        } catch (IOException e) {
 //            System.out.println("파일 로드 중 오류 발생: " + e.getMessage());
 //        }
@@ -520,6 +520,41 @@ public class Main {
         for(Student s : set4) {
             System.out.println(s.studentNum + "-" + s.name);
         }
+
+        //확인문제 9번
+        Map<String, Integer> map4 = new HashMap<>();
+        map4.put("blue", 96);
+        map4.put("hong", 86);
+        map4.put("white", 92);
+
+        String name = null;
+        int maxScore = Collections.max(map4.values());
+        int totalScore = 0;
+
+        // Map.Entry를 사용하여 이름(key)과 점수(totalScore 합산) 구하기
+        for (Map.Entry<String, Integer> entry : map4.entrySet()) {
+            totalScore += entry.getValue(); // 합계 누적
+
+            if (entry.getValue() == maxScore) { // 점수가 최고 점수와 같다면
+                name = entry.getKey(); // 해당 아이디 저장
+            }
+        }
+
+        int avgScore = totalScore / map4.size(); // 평균 계산
+        System.out.println("평균 점수: " + avgScore);
+        System.out.println("최고 점수: " + maxScore);
+        System.out.println("최고 점수를 받은 아이디: " + name);
+        System.out.println("---------------------");
+
+        //확인문제 10번
+        TreeSet<Student2> treeSet2 = new TreeSet<Student2>();
+        treeSet2.add(new Student2("blue", 96));
+        treeSet2.add(new Student2("hong", 86));
+        treeSet2.add(new Student2("white", 92));
+
+        Student2 student2 = treeSet2.last();
+        System.out.println("최고 점수: " + student2.score);
+        System.out.println("최고 점수를 받은 아이디: " + student2.id);
 
 
 
