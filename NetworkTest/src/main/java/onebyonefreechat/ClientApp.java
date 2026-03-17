@@ -1,15 +1,14 @@
 package onebyonefreechat;
 
-import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class ClientApp implements Runnable {
+public class ClientApp extends Thread {
 	private Socket socket;
 	private DataInputStream dis;
-	private DataOutputStream bw;
+	private DataOutputStream dos;
 
 	public ClientApp() throws IOException {
 		this.socket = new Socket(); // 클라이언트의 통신용 소켓 생성
@@ -20,13 +19,13 @@ public class ClientApp implements Runnable {
 		this.socket.connect(new InetSocketAddress("localhost", 59997));
 		// 해당 ip 와 포트로 접속을 시도한다.
 
-		this.dis = new DataInputStream(this.socket.getInputStream());
-		this.bw = new DataOutputStream((this.socket.getOutputStream()));
+		this.dis = new DataInputStream(new BufferedInputStream(this.socket.getInputStream()));
+		this.dos = new DataOutputStream(new BufferedOutputStream(this.socket.getOutputStream()));
 	}
 
 	public void close() throws IOException {
 		try {
-			this.bw.close();
+			this.dos.close();
 		} catch (Exception ex) {
 		}
 		try {
@@ -50,28 +49,32 @@ public class ClientApp implements Runnable {
 //		}
 		return str;
 	}
+
 	@Override
 	public void run() {
 		// 서버로부터 데이터를 읽는 동작을 해야 한다.
-        try {
-            dis = new DataInputStream(socket.getInputStream());
-            String message = dis.readUTF();
-            System.out.println(message);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-        // 읽어서 화면에 출력해야 한다.
-
+		// 읽어서 화면에 출력해야 한다.
 		// 왜 스레드에서 실행해야 하나요 ? 읽는 동작이 블로킹모드가 되기 때문이다.
+		String msg = null;
+		try {
+			while( true ) {
+				msg = this.read();
+				System.out.println("From Server : " + msg);
+			}
+		} catch (IOException e) {
+			System.out.println("접속이 끊겼습니다.");
+			System.exit(-345);
+		}
 	}
 
 
 	public void send(String msg) {
 		try {
-			bw.writeUTF(msg);
-            bw.flush();
+			this.dos.writeUTF(msg);
+			this.dos.flush();
 		} catch (Exception ex) {
+			System.out.println("접속이 끊겼습니다.");
+			System.exit(-345);
 		}
 	}
 
@@ -82,13 +85,11 @@ public class ClientApp implements Runnable {
 			scanner = new Scanner(System.in);
 			ca = new ClientApp();
 			ca.connect();
+			ca.start();
 
 			while(true) {
 				String str = scanner.nextLine();
 				ca.send(str);
-
-				String msg = ca.read();
-				System.out.println("SERVER:" + msg);
 			}
 		} catch (Exception ex) {
 			System.err.println(ex.toString());

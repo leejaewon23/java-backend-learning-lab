@@ -31,34 +31,29 @@ public class ServerApp {
 	public static void main(String[] args) {
 		ServerApp sa = null;
 		Scanner scanner = null;
-        onebyonefreechat.ServerCommuicateSocket scs = null;
+		ServerCommuicateSocket scs = null;
 
 		try {
 			scanner = new Scanner(System.in);
 			sa = new ServerApp();
 			Socket socket = sa.accept();
 			// 클라이언트 연력이 되면 ServerCommuicateSocket 객체를 만드세요.
-			// ServerCommuicateSocket scs = new ServerCommuicateSocket(....);
-            scs =  new ServerCommuicateSocket(socket);
+			scs = new ServerCommuicateSocket(socket);
+			scs.start();
 
 			while(true) {
 				String str = scanner.nextLine();
-                if(str.equalsIgnoreCase("q")) break;
 				scs.send(str);
 				// 서버가 클라이언트통신 소켓 에게 데이터를 전송했다.
 			}
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		} finally {
-            if (scs != null) {
-                scs.close();
-            }
-
+			if ( scs != null ) {
+				scs.close();
+			}
 			try {
-                if (sa != null) {
-                    sa.close(); // 서버소켓을 닫았다.
-
-                }
+				sa.close(); // 서버소켓을 닫았다.
 			} catch (Exception ex) {
 			}
 		}
