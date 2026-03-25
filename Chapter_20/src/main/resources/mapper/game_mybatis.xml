@@ -4,17 +4,27 @@
 <mapper namespace="org.example.chapter_20.gamecrud.GameMybatis">
     <insert id="insertData" parameterType="GameDto">
         INSERT INTO game_tbl (
-                               name
-                             , genre
-                             , grade
+                               genre
                              , price
                              , img_url
+                             , name
+                             , grade
         ) VALUES (
-                   #{name}
-                 , #{genre}
-                 , #{grade}
+                   #{genre}
                  , #{price}
                  , #{imgUrl}
+                 , #{name}
+                 , #{grade}
                  )
     </insert>
+
+    <update id="updateData" parameterType="GameDto">
+        UPDATE game_tbl SET
+            name = #{name}
+                          , price = #{price}
+                          , genre = #{genre}
+                          , img_url = #{imgUrl}
+                          , grade = #{grade}
+        WHERE id = #{id}
+    </update>
 </mapper>
