@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>User Insert</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h2>사용자 등록</h2>
+
+<label>아이디: <input type="text" id="userid"></label><br><br>
+<label>이름: <input type="text" id="username"></label><br><br>
+<label>비밀번호: <input type="password" id="userpassword"></label><br><br>
+<label>나이: <input type="number" id="userage"></label><br><br>
+<label>이메일: <input type="text" id="useremail"></label><br><br>
+
+<button onclick="insertUser()">등록</button>
+
+<p id="result"></p>
+
+<script>
+    function insertUser() {
+        const data = {
+            userid:       parseInt($("#userid").val()),
+            username:     $("#username").val(),
+            userpassword: $("#userpassword").val(),
+            userage:      parseInt($("#userage").val()),
+            useremail:    $("#useremail").val()
+        };
+
+        console.log("전송 데이터:", JSON.stringify(data)); // 확인용
+
+        $.ajax({
+            url:         "/api/users/insert-data",
+            type:        "POST",
+            contentType: "application/json",
+            data:        JSON.stringify(data),
+            success: function(response) {
+                $("#result").text("✅ " + response);
+            },
+            error: function(err) {
+                $("#result").text("❌ 오류 발생: " + err.status);
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

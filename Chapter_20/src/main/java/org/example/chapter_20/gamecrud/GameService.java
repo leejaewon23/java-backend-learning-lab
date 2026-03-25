@@ -1,0 +1,14 @@
+package org.example.chapter_20.gamecrud;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class GameService {
+    @Autowired
+    private GameMybatis gameMybatis;
+
+    public void insertData(GameDto newGame){
+        this.gameMybatis.insertData(newGame);
+    }
+}
