@@ -1,7 +1,21 @@
 class NintendoGame {
     #gameList = [
-        {id:1, name:"마리오 골프", genre:"S", grade:"ALL", price:20000, imgUrl:"https://pimg.mk.co.kr/news/cms/202504/06/news-p.v1.20250404.ad221f845db2489a86c2ff50f32c53fa_P1.png"},
-        {id:2, name:"젤다의 전설", genre:"R", grade:"ALL", price:30000, imgUrl:"https://store.nintendo.co.kr/media/catalog/product/cache/3be328691086628caca32d01ffcc430a/f/i/file.jpg"},
+        {
+            id: 1,
+            name: "마리오 골프",
+            genre: "S",
+            grade: "ALL",
+            price: 20000,
+            imgUrl: "https://pimg.mk.co.kr/news/cms/202504/06/news-p.v1.20250404.ad221f845db2489a86c2ff50f32c53fa_P1.png"
+        },
+        {
+            id: 2,
+            name: "젤다의 전설",
+            genre: "R",
+            grade: "ALL",
+            price: 30000,
+            imgUrl: "https://store.nintendo.co.kr/media/catalog/product/cache/3be328691086628caca32d01ffcc430a/f/i/file.jpg"
+        },
     ];
 
     printList() {
@@ -13,7 +27,7 @@ class NintendoGame {
     }
 
     printGenre(genre) {
-        switch(genre) {
+        switch (genre) {
             case "A":
                 return "액션";
             case "S":
@@ -25,7 +39,7 @@ class NintendoGame {
     }
 
     printGrade(grade) {
-        switch(grade) {
+        switch (grade) {
             case "ALL":
                 return "전체이용";
             case "18":
@@ -78,11 +92,11 @@ class NintendoGame {
         // 사용자 입력데이터 검증한다.
         // 입력데이터가 올바르면 true 리턴
         // 아니면 false 리턴
-        if ( mode === "add" && $("#id").val() != 0 ) {
+        if (mode === "add" && $("#id").val() != 0) {
             alert("ID 값이 유효하지 않습니다.");
             return false;
-        } else  if ( mode === "update" || mode === "delete" ) {
-            if ( $("#id").val() == 0 ) {
+        } else if (mode === "update" || mode === "delete") {
+            if ($("#id").val() == 0) {
                 alert("ID 값이 유효하지 않습니다.");
                 return false;
             } else {
@@ -113,7 +127,7 @@ class NintendoGame {
 
     addGame() {
         // 사용자 입력 데이터가 유효한지 검증해야 한다. 유효하지 않으면 경고창 띄우고 리턴;
-        if ( !this.checkInputData("add") ) {
+        if (!this.checkInputData("add")) {
             return;
         }
         let maxId = this.#gameList.reduce((result, item) => {
@@ -151,17 +165,17 @@ class NintendoGame {
             , data: JSON.stringify(newGame)
             , contentType: "application/json"
         })
-            .done(function(data, textStatus, jqXHR) {
+            .done(function (data, textStatus, jqXHR) {
                 // 요청 성공 시 실행
                 alert("성공:", data);
 //	    $("#result").text(data.message);
                 clearInputBox();
             })
-            .fail(function(jqXHR, textStatus, errorThrown) {
+            .fail(function (jqXHR, textStatus, errorThrown) {
                 // 요청 실패 시 실행
                 alert("실패:", textStatus);
             })
-            .always(function() {
+            .always(function () {
                 // 성공/실패 관계없이 항상 실행
 //	    console.log("요청 완료");
             });
@@ -169,7 +183,7 @@ class NintendoGame {
 
     updateGame() {
         // 사용자 입력 데이터가 유효한지 검증해야 한다. 유효하지 않으면 경고창 띄우고 리턴;
-        if ( !this.checkInputData("update") ) {
+        if (!this.checkInputData("update")) {
             return;
         }
         // 입력데이터는 JS 객체로 만든다. let JS객체 = {id:고유번호, name:$("#name").val(), genre:"S", grade:"ALL", price:금액, imgUrl:"http://..."};
@@ -195,6 +209,32 @@ class NintendoGame {
             , data: JSON.stringify(gameData)
             , contentType: "application/json"
         })
+            .done(function (data, textStatus, jqXHR) {
+                // 요청 성공 시 실행
+                alert("성공:", data);
+                //	    $("#result").text(data.message);
+                clearInputBox();
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                // 요청 실패 시 실행
+                alert("실패:", textStatus);
+            })
+            .always(function () {
+                // 성공/실패 관계없이 항상 실행
+                //	    console.log("요청 완료");
+            });
+    }
+
+    deleteGame(id) {
+        //  deleteData(deleteGame) {
+        $.ajax({
+            url: "/api/delete-data" // 요청 URL
+            , type: "DELETE"          // 전송 방식 (GET, POST 등)
+            , dataType: "json"      // 응답 데이터 타입
+            , data: JSON.stringify({"id":id})
+//  	    , data: JSON.stringify(deleteGame)
+            , contentType: "application/json"
+        })
             .done(function(data, textStatus, jqXHR) {
                 // 요청 성공 시 실행
                 alert("성공:", data);
@@ -211,16 +251,6 @@ class NintendoGame {
             });
     }
 
-    deleteGame() {
-        // 사용자 입력 데이터가 유효한지 검증해야 한다. 유효하지 않으면 경고창 띄우고 리턴;
-        if ( !this.checkInputData("delete") ) {
-            return;
-        }
-        // gameList 배열에서 기존의 id 번호랑 같은 원소를 찾는다. let 찾는객체 = this.#gameList.find(() => {});
-        // 찾는객체를 gameList 배열에서 삭제한다.
-        // gameList 배열정보를 게임목록 화면에 출력한다. this.printList();
-    }
-
     printOneGame(e) {
         // 화면의 id 값으로 gameList배열에서 찾는다. let id값 = $("#id").val();, let 찾은원소 = this.#gameList.find(() => {});
         let selectId = $(e.currentTarget).find(".idClass").val() * 1;
@@ -228,13 +258,15 @@ class NintendoGame {
         let findGame = this.#gameList.find((item) => {
             return item.id === selectId;
         });
-        if ( findGame == undefined ) {
+        if (findGame == undefined) {
             return;
         }
         // this.setData2InputBox(찾은원소);
         this.setData2InputBox(findGame);
     }
 }
+
+
 
 $(() => {
     // jquery 실행
@@ -250,7 +282,7 @@ $(() => {
     });
 
     $(document).on("click", "#btnDel", (e) => {
-        nint.deleteGame();
+        nint.deleteGame($("#id").val() * 1);
     });
 
     $(document).on("click", ".listDataRow", (e) => {

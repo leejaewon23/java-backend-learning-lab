@@ -6,6 +6,7 @@ import lombok.*;
 @Getter
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 public class GameDto {
     private Integer id;
     private String name;
@@ -14,12 +15,5 @@ public class GameDto {
     private Integer price;
     private String imgUrl;
 }
-
-//    id: maxId
-//      , name: $("#name").val()
-//      , genre: $("#genre").val()
-//      , grade: $("#grade").val()
-//      , price: $("#price").val() * 1
-//            , imgUrl: $("#imgUrl").val()
 
 
