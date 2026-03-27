@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class GameRestController {
     @Autowired
@@ -46,6 +48,32 @@ public class GameRestController {
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CommonResponse(-999, "Server Error"));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/api/getdata")
+    public ResponseEntity<CommonResponse> getData(@RequestParam("id") Integer id) {
+        try {
+            System.out.println("getData, id=" + id);
+            GameDto find = this.gameService.findById(id);
+            return ResponseEntity.ok().body(new CommonResponse(0, "OK", find));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CommonResponse(-999, "Server Error", null));
+        }
+    }
+
+    @GetMapping("/api/search-list")
+    @ResponseBody
+    public ResponseEntity<CommonResponse> searchList(@ModelAttribute SearchDto searchDto) {
+        try {
+            System.out.println("searchList, searchDto=" + searchDto);
+            List<GameDto> list = this.gameService.searchList(searchDto);
+            return ResponseEntity.ok().body(new CommonResponse(0, "OK", list));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CommonResponse(-999, "Server Error", null));
         }
     }
 }

@@ -32,4 +32,30 @@
         DELETE FROM game_tbl
         WHERE id = #{id}
     </delete>
+
+    <select id="findById" parameterType="Integer" resultType="GameDto">
+        SELECT
+            id
+             , name
+             , genre
+             , grade
+             , price
+             , img_url
+        FROM game_tbl
+        WHERE id = #{id}
+    </select>
+
+    <select id="searchList" parameterType="SearchDto" resultType="GameDto">
+        SELECT
+            id
+             , name
+             , genre
+             , grade
+             , price
+             , img_url
+        FROM game_tbl
+        WHERE name LIKE CONCAT('%', #{searchName}, '%')
+          AND grade = #{searchGrade}
+        ORDER BY id DESC
+    </select>
 </mapper>
