@@ -66,11 +66,11 @@ public class GameRestController {
 
     @GetMapping("/api/search-list")
     @ResponseBody
-    public ResponseEntity<CommonResponse> searchList(@ModelAttribute SearchDto searchDto) {
+    public ResponseEntity<CommonResponse> searchList(@ModelAttribute SearchRequestDto searchRequestDto) {
         try {
-            System.out.println("searchList, searchDto=" + searchDto);
-            List<GameDto> list = this.gameService.searchList(searchDto);
-            return ResponseEntity.ok().body(new CommonResponse(0, "OK", list));
+            System.out.println("searchList, searchDto=" + searchRequestDto);
+            SearchResponseDto result = this.gameService.searchList(searchRequestDto);
+            return ResponseEntity.ok().body(new CommonResponse(0, "OK", result));
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CommonResponse(-999, "Server Error", null));

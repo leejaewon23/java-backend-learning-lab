@@ -81,13 +81,21 @@
         <fieldSet class="searchField">
           <div class="searchRow">
             <legend>검색 타이틀</legend>
-            <label for="searchName"></label><input type="text" id="searchName" />
-            <label for="searchGrade"></label>
+            <label for="searchName">조회제목</label><input type="text" id="searchName" />
+            <label for="searchGrade">조회등급</label>
             <select id="searchGrade" class="searchCombo">
               <option value="">전체검색</option>
               <option value="ALL">전체이용</option>
               <option value="18">18세이상</option>
               <option value="13">13세이상</option>
+            </select>
+            <label for="searchGrade">페이지당행수</label>
+            <select id="rowsPerPage" class="searchCombo">
+              <option value="2" selected>2</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
             </select>
 <!--            <input type="text" id="searchGrade" />-->
             <button id="btnSearch">검색</button>
@@ -123,6 +131,11 @@
             </div> -->
           </div>
         </fieldset>
+      </section>
+      <section id="pageSection">
+        <button class="btnPage">1</button>
+        <button class="btnPage">2</button>
+        <button class="btnPage">3</button>
       </section>
     </main>
     <footer>

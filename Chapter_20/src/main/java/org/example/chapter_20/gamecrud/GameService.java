@@ -26,7 +26,16 @@ public class GameService {
         return this.gameMybatis.findById(id);
     }
 
-    public List<GameDto> searchList(SearchDto searchDto) {
-        return this.gameMybatis.searchList(searchDto);
+    public SearchResponseDto searchList(SearchRequestDto requestDto) {
+        SearchResponseDto result = new SearchResponseDto();
+        result.setData(requestDto);
+//		result.setCurPage(requestDto.getCurPage());
+//		result.setRowsPerPage(requestDto.getRowsPerPage());
+        requestDto.calculate();
+        Integer count = this.gameMybatis.countList(requestDto);
+        result.setCount(count);
+        result.setList(this.gameMybatis.searchList(requestDto));
+        return result;
     }
+
 }

@@ -12,33 +12,19 @@ class NintendoGame {
     });
   }
 
-  searchList() {
-//    let searchData = {
-//        "searchName" : $("#searchName").val()
-//        , "searchGrade" : $("searchGrade").val()
-//    };
-	let searchName = $("#searchName").val();
-	let searchGrade = $("#searchGrade").val();
-    let that = this; // this를 that에 저장
-	$.ajax({
-//	    url: "/api/search-list?searchName=" + searchName + "&searchGrade=" + searchGrade // 요청 URL
-	    url: `/api/search-list?searchName=${searchName}&searchGrade=${searchGrade}` // 요청 URL
-	    , type: "GET"          // 전송 방식 (GET, POST 등)
-	})
-	.done(function(data, textStatus, jqXHR) {
-	    // 요청 성공 시 실행
-//	    alert("성공:", data);
-	    that.printList(data.resultData);
-	})
-	.fail(function(jqXHR, textStatus, errorThrown) {
-	    // 요청 실패 시 실행
-	    alert("실패:", textStatus);
-	})
-	.always(function() {
-	    // 성공/실패 관계없이 항상 실행
-//	    console.log("요청 완료");
-	});
-  }
+//  getPrevButton(page) {
+//    page = (page - 10 <= 1 ? page - 10 : 1);
+//    return `<button class="" onclick="searchList(${page})">◀</button>`;
+//  }
+//
+//  getNumberButton(page, totEndPage) {
+//    return `<button class="btnPage">${page}</button>`;
+//  }
+//
+//  getNextButton(page, totEndPage) {
+//    page = (page + 10 <= totEndPage ? page + 10 : totEndPage);
+//    return `<button class="" onclick="searchList(${page})">▶</button>`;
+//  }
 
   printGenre(genre) {
     switch(genre) {
@@ -162,7 +148,7 @@ class NintendoGame {
     this.insertData(newGame);
 //    this.clearInputBox();
     // gameList 배열정보를 게임목록 화면에 출력한다. this.printList();
-    this.searchList();
+    this.searchList(1);
   }
 
   insertData(newGame) {
@@ -185,7 +171,7 @@ class NintendoGame {
 	    alert("성공:", data);
 //	    $("#result").text(data.message);
         that.clearInputBox();   // $.ajax 함수안에서 this 는 jquery 객체자신이므로 that 을 사용
-        that.searchList();  // 목록을 새로 고침
+        that.searchList(1);  // 목록을 새로 고침
 	})
 	.fail(function(jqXHR, textStatus, errorThrown) {
 	    // 요청 실패 시 실행
@@ -231,7 +217,7 @@ class NintendoGame {
   	    alert("성공:", data);
   //	    $("#result").text(data.message);
         that.clearInputBox();   // $.ajax 함수안에서 this 는 jquery 객체자신이므로 that 을 사용
-        that.searchList();  // 목록을 새로 고침
+        that.searchList(1);  // 목록을 새로 고침
   	})
   	.fail(function(jqXHR, textStatus, errorThrown) {
   	    // 요청 실패 시 실행
@@ -271,7 +257,7 @@ class NintendoGame {
   	    alert("성공:", data);
   //	    $("#result").text(data.message);
         that.clearInputBox();   // $.ajax 함수안에서 this 는 jquery 객체자신이므로 that 을 사용
-        that.searchList();  // 목록을 새로 고침
+        that.searchList(1);  // 목록을 새로 고침
   	})
   	.fail(function(jqXHR, textStatus, errorThrown) {
   	    // 요청 실패 시 실행
@@ -325,9 +311,140 @@ class NintendoGame {
 }
 
 $(() => {
+
+  $.getPrevButton = (page) => {
+//    let newPage = (page - 10 <= 1 ? page : page - 10);
+//    return `<button class="" onclick="$.searchList(${newPage})">◀</button>`;
+	if ( page - 10 < 1 ) {
+		return "<button>◁</button>";
+	} else {
+		page -= 10;
+		return `<button class="" onclick="$.searchList(${page})">◀</button>`;
+	}
+  }
+
+  $.getNumberButton = function(page, curPage) {
+    let curBtn = (page == curPage) ? "curPage" : "";
+    return `<button class="btnPage ${curBtn}">${page}</button>`;
+  }
+
+  $.getNextButton= function(page, endPage, totEndPage) {
+//    let newPage = (page + 10 <= totEndPage ? page + 10 : page);
+//    return `<button class="" onclick="$.searchList(${newPage})">▶</button>`;
+	if (endPage == totEndPage ) {
+		return "<button>▷</button>";
+	} else if (page + 10 <= totEndPage) {
+		return `<button class="" onclick="$.searchList(${page + 10})">▶</button>`;
+	} else {
+		return `<button class="" onclick="$.searchList(${totEndPage})">▶</button>`;
+	}
+  }
+
+
+  $.searchList = (curPage) => {
+	let searchName = $("#searchName").val();
+	let searchGrade = $("#searchGrade").val();
+	let rowsPerPage = $("#rowsPerPage").val();
+	//let page = (page - 1) * 5;
+
+	$.ajax({
+	    url: `/api/search-list?searchName=${searchName}&searchGrade=${searchGrade}&curPage=${curPage}&rowsPerPage=${rowsPerPage}` // 요청 URL
+	    , type: "GET"          // 전송 방식 (GET, POST 등)
+	})
+	.done(function(data, textStatus, jqXHR) {
+	    // 요청 성공 시 실행
+//	    alert("성공:", data);
+		$.printButtons(data.resultData);
+	    $.printList(data.resultData.list);
+	})
+	.fail(function(jqXHR, textStatus, errorThrown) {
+	    // 요청 실패 시 실행
+	    alert("실패:", textStatus);
+	})
+	.always(function() {
+	    // 성공/실패 관계없이 항상 실행
+//	    console.log("요청 완료");
+	});
+  }
+
+  $.printButtons = (paging) => {
+    // << -10 페이지 이동
+    // < -1 페이지 이동
+    // > +1 페이지 이동
+    // >> +10 페이지 이동
+    // totalRows = 6, rowsPerPage = 5 => 1(totStartPage, startPage) ~ 2(totEndPage, endPage)
+    // totalRows = 37, rowsPerPage = 5 => 1(totStartPage, startPage) ~ 8(totEndPage, endPage)
+    // totalRows = 40, rowsPerPage = 5 => 1(totStartPage, startPage) ~ 8(totEndPage, endPage)
+    // totalRows = 122, rowsPerPage = 5 => 1(totStartPage) ~ 25(totEndPage)
+    //                      curPage = 13 => 11(startPage) ~ 20(endPage)
+    // totalRows = 274, rowsPerPage = 5 => 1(totStartPage) ~ 55(totEndPage)
+    //                      curPage = 29 => 21(startPage) ~ 30(endPage)
+    let totStartPage = 1;
+    let totEndPage = Math.floor(paging.count / paging.rowsPerPage) + ((paging.count % paging.rowsPerPage == 0) ? 0 : 1);
+    let startPage = (paging.curPage <= 10) ? totStartPage : (Math.floor((paging.curPage - 1) / 10) * 10) + 1;
+    let endPage = (paging.curPage <= 10) ?
+                    (totEndPage <= 10 ? totEndPage : 10) :
+                    (startPage + 9 <= totEndPage ? startPage + 9 : totEndPage);
+	$("#pageSection").empty();
+	$("#pageSection").append($.getPrevButton(paging.curPage));
+	for ( let i = startPage; i <= endPage; i++ ) {
+		$("#pageSection").append($.getNumberButton(i, paging.curPage));
+	}
+	$("#pageSection").append($.getNextButton(paging.curPage, endPage, totEndPage));
+  }
+
+  $.printGenre = (genre) => {
+    switch(genre) {
+      case "A":
+        return "액션";
+      case "S":
+        return "스포츠";
+      case "R":
+        return "RPG";
+    }
+    return "-";
+  }
+
+  $.printGrade= (grade) => {
+    switch(grade) {
+      case "ALL":
+        return "전체이용";
+      case "18":
+        return "18세이상";
+      case "13":
+        return "13세이상";
+    }
+    return "-";
+  }
+
+  $.printRow = function(item) {
+    let html = `
+<div class="listDataRow">
+  <div class="listItem">
+    <input type="hidden" class="idClass" value="${item.id}"/>
+    <div class="itemData text-wrapper">${$.printGenre(item.genre)}</div>
+  </div>
+  <div class="listItem">
+    <div class="itemData text-wrapper">${$.printGrade(item.grade)}</div>
+  </div>
+  <div class="listItem">
+    <div class="itemData text-wrapper">${item.name}</div>
+  </div>
+</div>`;
+    return html;
+  }
+
+  $.printList = function(resultList) {
+    $(".listDataBlock").empty();
+    resultList.forEach((item) => {
+      // 배열을 순환하면서 item 을 class="frame-2" 태그 안의 자식 태그로 추가한다.
+      $(".listDataBlock").append($.printRow(item));
+    });
+  }
+
   // jquery 실행
   let nint = new NintendoGame();
-  nint.searchList();
+  $.searchList(1);
 
   $("#btnAdd").click((e) => {
     nint.addGame();
@@ -350,6 +467,10 @@ $(() => {
   });
 
   $(document).on("click", "#btnSearch", (e) => {
-    nint.searchList();
+    $.searchList(1);
+  });
+
+  $(document).on("click", ".btnPage", (e) => {
+    $.searchList($(e.target).text());
   });
 });
