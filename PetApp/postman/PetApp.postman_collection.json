@@ -66,7 +66,7 @@
       "response": []
     },
     {
-      "name": "delete",
+      "name": "findbyId",
       "request": {
         "method": "GET",
         "header": [],
@@ -81,6 +81,32 @@
             "api",
             "pet",
             "45"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/pet?id=2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "pet"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "2"
+            }
           ]
         }
       },
