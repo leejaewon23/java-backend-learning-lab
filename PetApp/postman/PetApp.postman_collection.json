@@ -14,7 +14,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"id\": null\n    , \"name\": \"나비\"\n    , \"species\": \"고양이\"\n    , \"breed\": \"먼치킨\"\n    , \"gender\": \"M\"\n    , \"birth\": \"2025-04-01\"\n}",
+          "raw": "{\n    \"name\": \"나비\"\n    , \"species\": \"고양이\"\n    , \"breed\": \"먼치킨\"\n    , \"gender\": \"M\"\n    , \"birth\": \"2025-04-01\"\n    , \"imgFile\": \"aaa.jpg\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -22,12 +22,12 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8084/api/pet",
+          "raw": "http://localhost:8080/api/pet",
           "protocol": "http",
           "host": [
             "localhost"
           ],
-          "port": "8084",
+          "port": "8080",
           "path": [
             "api",
             "pet"
@@ -68,27 +68,19 @@
     {
       "name": "delete",
       "request": {
-        "method": "POST",
+        "method": "GET",
         "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"id\": null\n    , \"name\": \"나비\"\n    , \"species\": \"고양이\"\n    , \"breed\": \"먼치킨\"\n    , \"gender\": \"M\"\n    , \"birth\": \"2025-04-01\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
         "url": {
-          "raw": "http://localhost:8084/api/pet",
+          "raw": "http://localhost:8080/api/pet/45",
           "protocol": "http",
           "host": [
             "localhost"
           ],
-          "port": "8084",
+          "port": "8080",
           "path": [
             "api",
-            "pet"
+            "pet",
+            "45"
           ]
         }
       },
