@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "pet_tbl")
-public class PetEntity {
+public class PetEntity implements IPet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
