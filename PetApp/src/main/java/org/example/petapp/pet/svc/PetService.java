@@ -2,9 +2,12 @@ package org.example.petapp.pet.svc;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.petapp.pet.PetRequestDto;
 import org.example.petapp.pet.dto.PetDto;
 import org.example.petapp.pet.dto.PetEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -50,4 +53,10 @@ public class PetService {
         result.copyMemberValue(petEntity);
         return result;
     }
+
+    public Slice<PetEntity> findByNameContains(PetRequestDto requestDto, Pageable pageable) {
+        Slice<PetEntity> list = this.petRepository.findByNameContains(requestDto.getSearchName(), pageable);
+        return list;
+    }
+
 }
