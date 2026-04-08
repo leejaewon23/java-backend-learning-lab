@@ -51,4 +51,14 @@ public class CategoryService {
         this.categoryRepository.findById(id);
         return result;
     }
+
+    public Slice<CategoryDto> findByNameContains(String name, Pageable pageable) {
+        Slice<CategoryEntity> list = this.categoryRepository.findByNameContains(name, pageable);
+        return list.map(category -> {
+            CategoryDto dto = new CategoryDto();
+            dto.setId(category.getId());
+            dto.setName(category.getName());
+            return dto;
+        });
+    }
 }
