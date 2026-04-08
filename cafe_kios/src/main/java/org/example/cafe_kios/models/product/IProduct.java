@@ -1,18 +1,47 @@
 package org.example.cafe_kios.models.product;
 
-import org.example.cafe_kios.models.category.IdName;
+import org.example.cafe_kios.models.category.ICategory;
 
-public interface IProduct extends IdName {
-	Integer getPrice();
-	void setPrice(Integer price);
+public interface IProduct {
+    Integer getId();
+    void setId(Integer id);
 
-	Integer getCategoryId();
-	void setCategoryId(Integer categoryId);
+    String getName();
+    void setName(String name);
 
-	String getPicture();
-	void setPicture(String picture);
+    Integer getPrice();
+    void setPrice(Integer price);
 
-	default void copyMembers(IProduct src) {
+    Integer getCategoryId();
+    void setCategoryId(Integer categoryId);
 
-	}
+    ICategory getCategoryObj();
+    void setCategoryObj(ICategory categoryObj);
+
+    String getPicture();
+    void setPicture(String picture);
+
+    default IProduct copyMembers(IProduct src) {
+        if ( src != null ) {
+            if ( src.getId() != null ) {
+                this.setId(src.getId());
+            }
+            if ( src.getName() != null ) {
+                this.setName(src.getName());
+            }
+            if ( src.getPrice() != null ) {
+                this.setPrice(src.getPrice());
+            }
+            if ( src.getCategoryId() != null ) {
+                this.setCategoryId(src.getCategoryId());
+            }
+            if ( src.getCategoryObj() != null) {
+                this.getCategoryObj().copyMembers(src.getCategoryObj());
+            }
+            if ( src.getPicture() != null ) {
+                this.setPicture(src.getPicture());
+            }
+        }
+        return this;
+    }
 }
