@@ -38,7 +38,17 @@ public class CategoryService {
         CategoryEntity resEntity = this.categoryRepository.findById(id).orElseThrow();
         CategoryDto result = new CategoryDto();
         result.setId(resEntity.getId());
+        result.setName(resEntity.getName());
         this.categoryRepository.deleteById(id);
+        return result;
+    }
+
+    public CategoryDto findById(Integer id) {
+        CategoryEntity resEntity = this.categoryRepository.findById(id).orElseThrow();
+        CategoryDto result = new CategoryDto();
+        result.setId(resEntity.getId());
+        result.setName(resEntity.getName());
+        this.categoryRepository.findById(id);
         return result;
     }
 }

@@ -39,6 +39,14 @@ public class CategoryRestController {
         );
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<CategoryDto>> findById(@PathVariable Integer id) {
+        CategoryDto result = this.categoryService.findById(id);
+        return ResponseEntity.status(201).body(
+                ApiResponse.make(CafeResponse.select_success, "ok", result)
+        );
+    }
+
 
 
 }
