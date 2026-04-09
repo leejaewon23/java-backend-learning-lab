@@ -11,4 +11,5 @@ public enum CafeResponse {
     delete_success,
     select_success,
     other_failed,
+    found_failed,
 }

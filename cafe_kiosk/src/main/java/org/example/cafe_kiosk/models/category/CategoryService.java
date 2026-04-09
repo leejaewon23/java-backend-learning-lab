@@ -1,5 +1,6 @@
 package org.example.cafe_kiosk.models.category;
 
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -12,6 +13,10 @@ public class CategoryService {
 
     public CategoryDto insert(CategoryDto categoryDto) {
         CategoryEntity newData = new CategoryEntity();
+        return saveCategoryDto(categoryDto, newData);
+    }
+
+    private @NonNull CategoryDto saveCategoryDto(CategoryDto categoryDto, CategoryEntity newData) {
         newData.setName(categoryDto.getName());
         newData.setId(categoryDto.getId());
 
@@ -24,31 +29,27 @@ public class CategoryService {
     }
 
     public CategoryDto update(CategoryDto categoryDto) {
-        CategoryEntity newData = new CategoryEntity();
-        newData.setId(categoryDto.getId());
-        newData.setName(categoryDto.getName());
-        CategoryEntity resEntity = this.categoryRepository.save(newData);
-        CategoryDto result = new CategoryDto();
-        result.setId(resEntity.getId());
-        result.setName(resEntity.getName());
-        return result;
+        CategoryEntity findData = this.categoryRepository.findById(categoryDto.getId()).orElseThrow();
+        return saveCategoryDto(categoryDto, findData);
     }
 
     public CategoryDto deleteById(Integer id) {
-        CategoryEntity resEntity = this.categoryRepository.findById(id).orElseThrow();
-        CategoryDto result = new CategoryDto();
-        result.setId(resEntity.getId());
-        result.setName(resEntity.getName());
+//        CategoryEntity resEntity = this.categoryRepository.findById(id).orElseThrow();
+//        CategoryDto result = new CategoryDto();
+//        result.setId(resEntity.getId());
+//        result.setName(resEntity.getName());
+//        this.categoryRepository.deleteById(id);
+//        return result;
+        CategoryDto result = this.findById(id);
         this.categoryRepository.deleteById(id);
         return result;
     }
 
     public CategoryDto findById(Integer id) {
-        CategoryEntity resEntity = this.categoryRepository.findById(id).orElseThrow();
+        CategoryEntity findData = this.categoryRepository.findById(id).orElseThrow();
         CategoryDto result = new CategoryDto();
-        result.setId(resEntity.getId());
-        result.setName(resEntity.getName());
-        this.categoryRepository.findById(id);
+        result.setId(findData.getId());
+        result.setName(findData.getName());
         return result;
     }
 
