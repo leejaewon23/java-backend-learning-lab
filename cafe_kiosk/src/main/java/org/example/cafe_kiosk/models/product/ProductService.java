@@ -3,7 +3,11 @@ package org.example.cafe_kiosk.models.product;
 import org.example.cafe_kiosk.models.category.CategoryDto;
 import org.example.cafe_kiosk.models.category.CategoryEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProductService {
@@ -12,46 +16,49 @@ public class ProductService {
     private ProductRepository productRepository;
 
     public ProductDto insert(ProductDto newDto) {
-        ProductEntity newEntity = ProductEntity.builder()
-                .id(null) //화면에 id 값이 있더라도 null로 해서 확실하게 insert 시킨다.
-                .name(newDto.getName())
-                .price(newDto.getPrice())
-                .category(new CategoryEntity()) // CategoryEntity 객체를 만들어서 Dto로 형변환
-                .picture(newDto.getPicture())
-                .build();
-        newEntity.getCategory().setId(newDto.getCategory().getId());
+        ProductEntity newEntity = (ProductEntity) new ProductEntity().copyMembers(newDto, true);
+        newEntity.setId(null);
 
         ProductEntity save = this.productRepository.save(newEntity);
 
-        ProductDto result = ProductDto.builder()
-                .id(save.getId())
-                .name(save.getName())
-                .price(save.getPrice())
-                .category(new CategoryDto()) // => 단순 객체 복사가 아니라 형변환을 해야 한다.
-                .picture(save.getPicture())
-                .build();
-        result.getCategory().setId(save.getCategory().getId());
-        result.getCategory().setName(save.getCategory().getName());
+        ProductDto result = (ProductDto) new ProductDto().copyMembers(save, true);
         return result;
     }
 
     public ProductDto update(ProductDto updateDto) {
         ProductEntity findEntity = this.productRepository.findById(updateDto.getId()).orElseThrow();
-        findEntity.setName(updateDto.getName());
-        findEntity.setPrice(updateDto.getPrice());
-        findEntity.getCategory().setId(updateDto.getCategory().getId());
-        findEntity.getCategory().setName(updateDto.getCategory().getName());
-        findEntity.setPicture(updateDto.getPicture());
-        this.productRepository.save(findEntity);
+        ProductEntity data = (ProductEntity) new ProductEntity().copyMembers(findEntity, true);
+        data.copyMembers(updateDto, false);
 
-        ProductDto result = new ProductDto();
-        result.setId(findEntity.getId());
-        result.setName(findEntity.getName());
-        result.setPrice(findEntity.getPrice());
-        result.getCategory().setId(findEntity.getCategory().getId());
-        result.getCategory().setName(findEntity.getCategory().getName());
-        result.setPicture(findEntity.getPicture());
+        ProductEntity save = this.productRepository.save(data);
+
+        ProductDto result = (ProductDto) new ProductDto().copyMembers(save, true);
         return result;
+    }
+
+    public ProductDto deleteById(Integer id) {
+        ProductDto find = this.findById(id);
+        this.productRepository.deleteById(id);
+        return find;
+    }
+
+    public ProductDto findById(Integer id) {
+        ProductEntity find = this.productRepository.findById(id).orElseThrow();
+        ProductDto result = (ProductDto) new ProductDto().copyMembers(find, true);
+        return result;
+    }
+
+    public Slice<ProductDto> findByNameContains(String name, Pageable pageable) {
+         Slice<ProductEntity> list = this.productRepository.findByNameContains(name, pageable);
+        return list.map(category -> {
+            ProductDto dto = new ProductDto();
+            dto.setId(category.getId());
+            dto.setName(category.getName());
+            dto.setCategory(category.getCategory());
+            dto.setPrice(category.getPrice());
+            dto.setPicture(category.getPicture());
+            return dto;
+        });
     }
 
 }
