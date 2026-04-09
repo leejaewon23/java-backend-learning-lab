@@ -35,4 +35,23 @@ public class ProductService {
         return result;
     }
 
+    public ProductDto update(ProductDto updateDto) {
+        ProductEntity findEntity = this.productRepository.findById(updateDto.getId()).orElseThrow();
+        findEntity.setName(updateDto.getName());
+        findEntity.setPrice(updateDto.getPrice());
+        findEntity.getCategory().setId(updateDto.getCategory().getId());
+        findEntity.getCategory().setName(updateDto.getCategory().getName());
+        findEntity.setPicture(updateDto.getPicture());
+        this.productRepository.save(findEntity);
+
+        ProductDto result = new ProductDto();
+        result.setId(findEntity.getId());
+        result.setName(findEntity.getName());
+        result.setPrice(findEntity.getPrice());
+        result.getCategory().setId(findEntity.getCategory().getId());
+        result.getCategory().setName(findEntity.getCategory().getName());
+        result.setPicture(findEntity.getPicture());
+        return result;
+    }
+
 }
