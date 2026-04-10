@@ -3,8 +3,7 @@ package org.example.cafe_kiosk.models.product;
 import org.example.cafe_kiosk.models.category.CategoryDto;
 import org.example.cafe_kiosk.models.category.CategoryEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,16 +48,40 @@ public class ProductService {
     }
 
     public Slice<ProductDto> findByNameContains(String name, Pageable pageable) {
-         Slice<ProductEntity> list = this.productRepository.findByNameContains(name, pageable);
-        return list.map(category -> {
-            ProductDto dto = new ProductDto();
-            dto.setId(category.getId());
-            dto.setName(category.getName());
-            dto.setCategory(category.getCategory());
-            dto.setPrice(category.getPrice());
-            dto.setPicture(category.getPicture());
-            return dto;
-        });
+        Slice<ProductEntity> find = this.productRepository.findByNameContains(name, pageable);
+        // Slice<ProductEntity> => Slice<ProductDto> 변환해서 리턴하는게 비고적 데이터가 안전해서 좋다.
+        List<ProductDto> list = find.getContent().stream()
+                .map(item -> {
+                    ProductDto convert = (ProductDto) new ProductDto().copyMembers(item, true);
+                    return convert;
+                }).toList();
+        Slice<ProductDto> result = new SliceImpl<>(list, find.getPageable(), find.hasNext());
+        return result;
     }
+
+    List<ProductDto> findByPriceGreaterThan(Integer price) {
+        List<ProductEntity> list = this.productRepository.findByPriceGreaterThanOrderByIdDesc(price);
+        List<ProductDto> result = list.stream()
+                .map( item -> {
+                    ProductDto convert = (ProductDto) new ProductDto().copyMembers(item, true);
+                    return convert;
+                }).toList();
+        return result;
+    }
+
+    Page<ProductDto> findByCategoryEntity(CategoryDto category, Pageable pageable) {
+        CategoryEntity categoryEntity = (CategoryEntity) new CategoryEntity().copyMembers(category, true);
+        Page<ProductEntity> find = this.productRepository.findByCategoryEquals(categoryEntity, pageable);
+        List<ProductDto> list = find.getContent().stream()
+                .map( item -> {
+                    ProductDto convert = (ProductDto) new ProductDto().copyMembers(item, true);
+                    return convert;
+                }).toList();
+        Page<ProductDto> result = new PageImpl<>(list, find.getPageable(), find.getTotalElements());
+        return result;
+    }
+
+
+
 
 }

@@ -13,6 +13,9 @@ import org.example.cafe_kiosk.models.category.ICategory;
 @NoArgsConstructor
 @Builder
 @Entity(name = "product")
+@NamedEntityGraph(name = "ProductEntity.fetchCategory", attributeNodes = {
+        @NamedAttributeNode("category")
+})
 public class ProductEntity implements IProduct{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

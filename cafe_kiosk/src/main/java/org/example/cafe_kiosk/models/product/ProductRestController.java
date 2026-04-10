@@ -2,13 +2,17 @@ package org.example.cafe_kiosk.models.product;
 
 import org.example.cafe_kiosk.common.ApiResponse;
 import org.example.cafe_kiosk.common.CafeResponse;
+import org.example.cafe_kiosk.models.category.CategoryDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/prd")
@@ -52,6 +56,24 @@ public class ProductRestController {
     public ResponseEntity<ApiResponse<Slice<ProductDto>>> findById(@RequestParam String name
             , @PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC) Pageable pageable) {
         Slice<ProductDto> result = this.productService.findByNameContains(name, pageable);
+        return ResponseEntity.status(200).body(
+                ApiResponse.make(CafeResponse.select_success, "ok", result)
+        );
+    }
+
+    @GetMapping("/pricegt")
+    public ResponseEntity<ApiResponse<List<ProductDto>>> findByPriceGreaterThan(@RequestParam Integer price) {
+        List<ProductDto> result = this.productService.findByPriceGreaterThan(price);
+        return ResponseEntity.status(200).body(
+                ApiResponse.make(CafeResponse.select_success, "ok", result)
+        );
+    }
+
+    @GetMapping("/cat")
+    public ResponseEntity<ApiResponse<Page<ProductDto>>> findByCategoryEntity(@RequestBody CategoryDto categoryDto
+            , @PageableDefault(page=0, size=3, sort="id", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<ProductDto> result = this.productService.findByCategoryEntity(categoryDto, pageable);
         return ResponseEntity.status(200).body(
                 ApiResponse.make(CafeResponse.select_success, "ok", result)
         );
