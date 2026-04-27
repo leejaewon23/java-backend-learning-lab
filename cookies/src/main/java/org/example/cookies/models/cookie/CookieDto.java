@@ -13,5 +13,3 @@ public class CookieDto implements IdName {
 	private Long id;
 	private String name;
 }
-
-

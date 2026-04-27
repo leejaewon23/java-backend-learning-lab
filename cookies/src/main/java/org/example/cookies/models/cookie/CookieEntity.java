@@ -16,6 +16,6 @@ public class CookieEntity implements IdName {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(length = 15, nullable = false, unique = true)
+	@Column(length = 30, nullable = false, unique = true)
 	private String name;
 }

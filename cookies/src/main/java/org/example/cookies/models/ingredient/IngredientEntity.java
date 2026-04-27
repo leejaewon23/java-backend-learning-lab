@@ -2,6 +2,7 @@ package org.example.cookies.models.ingredient;
 
 import org.example.cookies.models.category.CategoryEntity;
 import org.example.cookies.models.common.IdName;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -10,36 +11,56 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity(name = "ingredient")
+@NamedEntityGraph(name="IngredientEntity.fetchCategory", attributeNodes = {
+		@NamedAttributeNode(value="category")
+})
 public class IngredientEntity implements IngredientInterface {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(length = 30, nullable = false, unique = true)
 	private String name;
 
+	@Transient
 	private Long categoryId;
+
+	@JoinColumn(name = "category_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private CategoryEntity category;
 
 	@Override
-	public void setCategoryId(Long categoryId) {
-		// Long categoryId 랑 category.getId() 랑 값이 항상 같도록 해야 한다.
+	public Long getCategoryId() {
 		if ( this.category == null ) {
 			this.category = new CategoryEntity();
 		}
-		this.category.setId(this.categoryId);
+		if ( this.category.getId() != null) {
+			this.categoryId = this.category.getId();
+		}
+		return this.category.getId();
+	}
+
+	@Override
+	public void setCategoryId(Long categoryId) {
+		// Long 외래키값 과 객체.기본키 값을 항상 같도록 해야 한다.
+		if ( this.category == null ) {
+			this.category = new CategoryEntity();
+		}
+		this.category.setId(categoryId);
 		this.categoryId = categoryId;
 	}
 
 	@Override
-	public Long getCategoryId() {
-		this.setCategoryId(this.categoryId);
-		return this.categoryId;
-	}
-
-	@Override
 	public void setCategory(IdName category) {
-		// Long categoryId 랑 category.getId() 랑 값이 항상 같도록 해야 한다.
+		// Long 외래키값 과 객체.기본키 값을 항상 같도록 해야 한다.
 		if ( category == null ) {
 			return;
 		}
-//		this.getCategory().copyMembers(category, true);
-		this.setCategoryId(category.getId());
+		if ( this.category == null ) {
+			this.category = new CategoryEntity();
+		}
+		this.category.copyMembers(category, true);
+		this.categoryId = category.getId();
 	}
 }
