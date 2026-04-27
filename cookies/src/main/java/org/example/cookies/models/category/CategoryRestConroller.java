@@ -18,6 +18,7 @@ public class CategoryRestConroller {
 	@Autowired
 	private CategoryService categoryService;
 
+    // test GetMapping 추가
     @GetMapping("/{fruit}/{color}/{size}")
     public String test(@PathVariable String fruit, @PathVariable String color, @PathVariable String size) {
         log.info("test fruit={}, color={}, size={}", fruit, color, size);
