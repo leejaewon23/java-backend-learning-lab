@@ -54,7 +54,6 @@
         <appender-ref ref="ErrorRollingFile" />
     </root>
 
-
     <logger name="jdbc.sqltiming" level="${JPA_LEVEL}" additive="false" />
     <logger name="jdbc.resultsettable" level="${JPA_LEVEL}" additive="false" />
 
