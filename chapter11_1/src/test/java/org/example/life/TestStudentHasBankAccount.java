@@ -67,12 +67,12 @@ public class TestStudentHasBankAccount {
                 return false;
             }
         };
-        LifeOfStduentWithBank losw = new LifeOfStduentWithBank(allGoodMachine);
+        LifeOfStudentWithBank losw = new LifeOfStudentWithBank(allGoodMachine);
         losw.sendMoney(stuBank1, stuBank2, 50000);
         assertThat(stuBank1.getBankAccount().getMoney()).isEqualTo(-50000);
         assertThat(stuBank2.getBankAccount().getMoney()).isEqualTo(50000);
 
-        LifeOfStduentWithBank brokenSWB = new LifeOfStduentWithBank(brokenMachine);
+        LifeOfStudentWithBank brokenSWB = new LifeOfStudentWithBank(brokenMachine);
         brokenSWB.sendMoney(stuBank2, stuBank1, 10000);
         assertThat(stuBank1.getBankAccount().getMoney()).isEqualTo(-50000);
         assertThat(stuBank2.getBankAccount().getMoney()).isEqualTo(50000);

@@ -1,6 +1,6 @@
 package org.example.report3;
 
-public class GuGUDan7to9 extends Thread {
+public class GuGuDan7to9 extends Thread {
     @Override
     public void run() {
             for ( int dan = 7; dan <= 9; dan++ ) {

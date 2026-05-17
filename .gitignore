@@ -12,6 +12,7 @@
 
 # Package Files #
 *.jar
+!**/gradle/wrapper/gradle-wrapper.jar
 *.war
 *.nar
 *.ear
@@ -23,6 +24,42 @@
 hs_err_pid*
 replay_pid*
 .DS_Store
+
+# IntelliJ IDEA / editor metadata
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Gradle
+.gradle/
+build/
+
+# Maven
+target/
+
+# Eclipse / Java build outputs
+bin/
+out/
+generated/
+
+# Logs and runtime files
+logs/
+*.log
+
+# Environment variables and local secrets
+.env
+.env.*
+!.env.example
+
+# Local database volumes created by Docker Compose
+docker/**/mysql_data/
+docker/**/mariadb_data/
+docker/**/postgres_data/
+
+# OS metadata
+Thumbs.db
+
 chapter04/.idea/misc.xml
 chapter04/.idea/workspace.xml
 chapter05/.idea/misc.xml
@@ -41,3 +78,4 @@ chapter06_1/gradle/wrapper/gradle-wrapper.jar
 chapter06/gradlew.bat
 chapter06/gradlew
 chapter06/gradle/wrapper/gradle-wrapper.properties
+chapter06/gradle/wrapper/gradle-wrapper.jar

@@ -3,7 +3,7 @@ package org.example.report3;
 public class GuGuDan3 {
     public static void main(String[] args) throws InterruptedException {
         GuGuDan4to6 gg46  = new GuGuDan4to6();
-        Thread gg79 = new Thread(new GuGUDan7to9());
+        Thread gg79 = new Thread(new GuGuDan7to9());
 
         gg46.run();
         gg79.start();

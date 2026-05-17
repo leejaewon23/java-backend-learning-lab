@@ -180,7 +180,7 @@ public class Chapter06 {
 
     //과제4
     public void GameExample2() {
-        GameCharactor c1 = new GameCharactor("도적고양이", "도적", "여자", 203, 395, 20210101);
+        GameCharacter c1 = new GameCharacter("도적고양이", "도적", "여자", 203, 395, 20210101);
         System.out.println("------------------------");
         System.out.println("이름: " + c1.name);
         System.out.println("직업: " + c1.job);
@@ -189,7 +189,7 @@ public class Chapter06 {
         System.out.println("MP: " + c1.mp);
         System.out.println("생일: " + c1.birthday);
 
-        GameCharactor c2 = new GameCharactor("신사임걸", "마법사", "여자", 203, 395, 20230801);
+        GameCharacter c2 = new GameCharacter("신사임걸", "마법사", "여자", 203, 395, 20230801);
         System.out.println("------------------------");
         System.out.println("이름: " + c2.name);
         System.out.println("직업: " + c2.job);

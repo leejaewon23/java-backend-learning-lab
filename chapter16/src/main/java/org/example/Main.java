@@ -1,8 +1,8 @@
 package org.example;
 
-import ramda.NormalClassRamda;
-import ramda.Ramda;
-import ramda.RamdaUseInterface;
+import lambda.NormalClassLambda;
+import lambda.Lambda;
+import lambda.LambdaUseInterface;
 
 import javax.swing.*;
 
@@ -10,10 +10,10 @@ import static java.lang.Double.sum;
 
 public class Main {
     public static void main(String[] args) {
-        NormalClassRamda nui = new NormalClassRamda();
+        NormalClassLambda nui = new NormalClassLambda();
         nui.doSome();
 
-        RamdaUseInterface lui = new RamdaUseInterface();
+        LambdaUseInterface lui = new LambdaUseInterface();
         lui.doSome((str, n) -> {
             System.out.println(str.length() == n ?str +  " 같다 " + n : "다르다");
         }, "def", 3);

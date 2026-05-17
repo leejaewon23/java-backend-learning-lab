@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ServerAcceptThread extends Thread implements ServerNetworkInterface {
 	private ServerSocket serverSocket;
-	private List<ServerCommuicateSocket> clientList;
+	private List<ServerCommunicateSocket> clientList;
 
 	public ServerAcceptThread(ServerSocket serverSocket) {
 		this.serverSocket = serverSocket;
@@ -19,7 +19,7 @@ public class ServerAcceptThread extends Thread implements ServerNetworkInterface
 	public void accept() throws IOException {
 		Socket socket = this.serverSocket.accept();
 		System.out.println("client connect : " + socket.getInetAddress().getHostName());
-		ServerCommuicateSocket scs = new ServerCommuicateSocket(socket, this);
+		ServerCommunicateSocket scs = new ServerCommunicateSocket(socket, this);
 		this.clientList.add(scs);
 		scs.start();
 	}
@@ -38,7 +38,7 @@ public class ServerAcceptThread extends Thread implements ServerNetworkInterface
 
 	@Override
 	public void sendAllClients(String msg) {
-		for ( ServerCommuicateSocket sc : this.clientList) {
+		for ( ServerCommunicateSocket sc : this.clientList) {
 			try {
 				sc.send(msg);
 			} catch (IOException e) {
@@ -48,7 +48,7 @@ public class ServerAcceptThread extends Thread implements ServerNetworkInterface
 	}
 
 	@Override
-	public void deleteClient(ServerCommuicateSocket scs) {
+	public void deleteClient(ServerCommunicateSocket scs) {
 		scs.close();
 		this.clientList.remove(scs);
 	}

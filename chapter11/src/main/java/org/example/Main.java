@@ -6,7 +6,7 @@ import static org.example.ExceptionHandlingExample1.printLength;
 
 public class Main {
     public static void main(String[] args)  {
-        Casher cash = new Casher();
+        Cashier cash = new Cashier();
         try {
             cash.calculMoney();
         } catch (ArrayIndexOutOfBoundsException e) {

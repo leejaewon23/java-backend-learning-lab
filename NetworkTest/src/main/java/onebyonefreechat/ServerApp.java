@@ -31,14 +31,14 @@ public class ServerApp {
 	public static void main(String[] args) {
 		ServerApp sa = null;
 		Scanner scanner = null;
-		ServerCommuicateSocket scs = null;
+		ServerCommunicateSocket scs = null;
 
 		try {
 			scanner = new Scanner(System.in);
 			sa = new ServerApp();
 			Socket socket = sa.accept();
-			// 클라이언트 연력이 되면 ServerCommuicateSocket 객체를 만드세요.
-			scs = new ServerCommuicateSocket(socket);
+			// 클라이언트 연력이 되면 ServerCommunicateSocket 객체를 만드세요.
+			scs = new ServerCommunicateSocket(socket);
 			scs.start();
 
 			while(true) {
