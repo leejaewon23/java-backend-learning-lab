@@ -1,4 +1,4 @@
-# javaproject
+# java-backend-learning-lab
 
 국비교육 과정에서 Java 기초부터 Spring Boot 기반 CRUD 실습까지 진행하며 작성한 학습용 프로젝트 모음입니다.
 
