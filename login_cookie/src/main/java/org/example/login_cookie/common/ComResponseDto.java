@@ -6,12 +6,12 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ComResponseDto {
+public class ComResponseDto<T> {
     private Integer code;
     private String message;
-    private Object data;
+    private T data;
 
-    public static ComResponseDto make(Integer code, String message, Object data) {
-        return new ComResponseDto(code, message, data);
+    public static <T> ComResponseDto<T> make(ResponseCode resCode, T data) {
+        return new ComResponseDto<T>(resCode.getCode(), resCode.name(), data);
     }
 }

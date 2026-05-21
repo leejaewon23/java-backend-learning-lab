@@ -1,4 +1,32 @@
 package org.example.login_cookie.models.member;
 
+import org.example.login_cookie.common.ComResponseDto;
+import org.example.login_cookie.common.ResponseCode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/rest/member")
 public class MemberRestController {
+    @Autowired
+    private MemberService memberService;
+
+    @PostMapping("")
+    public ResponseEntity<ComResponseDto<MemberDto>> insert(@RequestBody MemberDto memberDto) {
+        MemberDto result = this.memberService.insert(memberDto);
+        return ResponseEntity.status(201).body(
+                ComResponseDto.make(ResponseCode.SUCCESS, result)
+        );
+    }
+
+    @GetMapping("")
+    public ResponseEntity<ComResponseDto<List<MemberDto>>> findAll() {
+        List<MemberDto> result = this.memberService.findAll();
+        return ResponseEntity.status(200).body(
+                ComResponseDto.make(ResponseCode.SUCCESS, result)
+        );
+    }
 }

@@ -1,4 +1,4 @@
-package com.mjc813.login_cookie.models.member;
+package org.example.login_cookie.models.member;
 
 import jakarta.persistence.*;
 import lombok.*;
