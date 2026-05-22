@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CookieTestController {
 
 	@GetMapping("/cookie/make")
-	public String home(HttpServletResponse response
+	public String make(HttpServletResponse response
 			, @RequestParam("name") String name
 			, @RequestParam("value") String value, Model model)
 	{
@@ -39,7 +39,7 @@ public class CookieTestController {
 	}
 
 	@GetMapping("/cookie/delete")
-	public String home(HttpServletResponse response
+	public String delete(HttpServletResponse response
 			, @RequestParam("name") String name, Model model)
 	{
 		Cookie ck = new Cookie(name, "");
