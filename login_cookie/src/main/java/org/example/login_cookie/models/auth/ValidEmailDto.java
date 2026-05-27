@@ -12,29 +12,26 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SignUpDto implements IMember {
+public class ValidEmailDto implements IMember {
 	@JsonIgnore
 	private Long id;
 
 	private String signId;
+
+	@JsonIgnore
 	private String password;
+	@JsonIgnore
 	private String email;
+	@JsonIgnore
+	private String role;
+	@JsonIgnore
+	private Boolean isValidEmail;
 
-    @JsonIgnore
-    private String role;
-
-    @JsonIgnore
-    private Boolean isValidEmail;
-
-    @JsonIgnore
-    private String validText;
-
-    @JsonIgnore
-    private LocalDateTime createDt;
-
-    @JsonIgnore
-    private LocalDateTime updateDt;
-
-    @JsonIgnore
-    private LocalDateTime deleteDt;
+	private String validText;
+	@JsonIgnore
+	private LocalDateTime createDt;
+	@JsonIgnore
+	private LocalDateTime updateDt;
+	@JsonIgnore
+	private LocalDateTime deleteDt;
 }
