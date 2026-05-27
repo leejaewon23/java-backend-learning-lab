@@ -35,3 +35,12 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Local configuration / secrets ###
+.env
+.env.*
+!.env.example
+application-local.yml
+application-local.yaml
+src/main/resources/application-local.yml
+src/main/resources/application-local.yaml
