@@ -3,9 +3,9 @@ spring:
     name: login_cookie
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL:jdbc:mysql://localhost:3306/auth_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8}
-    username: ${DB_USERNAME:auth_user}
-    password: ${DB_PASSWORD:}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update # Entity ? ????? ??? ???? ??????? ???? ?????.
@@ -27,11 +27,12 @@ spring:
       cache: false
       expose-request-attributes: true
     charset: UTF-8
+
   mail:
-    host: ${MAIL_HOST:smtp-relay.brevo.com}
-    port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME:}
-    password: ${MAIL_PASSWORD:}
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -39,9 +40,9 @@ spring:
           starttls:
             enable: true
 
-app:
-  mail:
-    from: ${MAIL_FROM:no-reply@example.com}
+#app:
+#  mail:
+#    from: ${MAIL_FROM}
 
 server:
   port: 8181

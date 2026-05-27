@@ -27,7 +27,8 @@ public class AuthService {
 	}
 
 	public Boolean signMember(SignInDto signInDto) throws LoginException {
-		MemberEntity find = this.memberJpaRepository.findBySignId(signInDto.getSignId()).orElseThrow();
+		MemberEntity find = this.memberJpaRepository.findBySignId(signInDto.getSignId())
+				.orElseThrow(() -> new LoginException("invalid signId or password"));
 		if ( !find.getIsValidEmail() ) {
 			throw new LoginException("not valid email");
 		}

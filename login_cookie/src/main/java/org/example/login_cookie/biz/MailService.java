@@ -23,8 +23,8 @@ import java.util.Map;
 @Slf4j
 @Service
 public class MailService {
-	@Value("${app.mail.from}")
-	private String fromEmail;
+//	@Value("${app.mail.from}")
+	private final String fromEmail = "sosekee1110@gmail.com";
 
 	@Autowired
 	private JavaMailSender mailSender;
