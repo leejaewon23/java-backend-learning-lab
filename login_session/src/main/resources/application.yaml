@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: login_cookie
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update # Entity ? ????? ??? ???? ??????? ???? ?????.
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+  mvc:
+    throw-exception-if-no-handler-found: true # @ExceptionHandler ?? ????? ???
+  #  web:
+  #    resources:
+  #      add-mappings: false # 404.html ?? ?? ??
+  mustache:
+    suffix: .html
+    servlet:
+      cache: false
+      expose-request-attributes: true
+    charset: UTF-8
+
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+#app:
+#  mail:
+#    from: ${MAIL_FROM}
+
+server:
+  port: 8181
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+kind: Application

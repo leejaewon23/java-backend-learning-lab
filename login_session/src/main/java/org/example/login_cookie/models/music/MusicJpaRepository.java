@@ -1,0 +1,8 @@
+package org.example.login_cookie.models.music;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface MusicJpaRepository extends JpaRepository<MusicEntity, Long> {
+}
