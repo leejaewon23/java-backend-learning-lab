@@ -1,8 +1,16 @@
 package org.example.sbsecurity_login.models.member;
 
-import java.time.LocalDateTime;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-public interface IMember {
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+public interface IMember extends UserDetails {
 	Long getId();
 	void setId(Long id);
 
@@ -69,4 +77,16 @@ public interface IMember {
 		}
 		return this;
 	}
+
+    @Override
+    default Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> list = new ArrayList<>();
+        list.add(new SimpleGrantedAuthority(this.getRole()));
+        return list;
+    }
+
+    @Override
+    default String getUsername() {
+        return this.getUsername();
+    }
 }
