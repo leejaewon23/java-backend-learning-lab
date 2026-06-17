@@ -3,6 +3,9 @@ package org.example.sbsecurity_login.models.member;
 import org.example.sbsecurity_login.common.Util;
 import org.example.sbsecurity_login.models.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -10,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MemberService {
+public class MemberService implements UserDetailsService {
 	@Autowired
 	private MemberJpaRepository memberJpaRepository;
 
@@ -68,4 +71,9 @@ public class MemberService {
 			return null;
 		}
 	}
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.findBySignId(username);
+    }
 }
