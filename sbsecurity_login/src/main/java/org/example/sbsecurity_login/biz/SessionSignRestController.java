@@ -28,7 +28,7 @@ public class SessionSignRestController {
 		MemberDto memberDto = (MemberDto)new MemberDto().clone(signUpDto, true);
 		MemberDto inserted = this.memberService.insert(memberDto, false);
 		return ResponseEntity.status(201).body(
-				ComResponseDto.make(ResponseCode.SUCCESS, signUpDto)
+				ComResponseDto.make(ResponseCode.SUCCESS, inserted)
 		);
 	}
 
