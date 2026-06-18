@@ -12,16 +12,22 @@ import org.example.sbsecurity_login.models.member.MemberDto;
 import org.example.sbsecurity_login.models.member.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
-public class SessionSignRestController {
+public class SbSecuritySignRestController {
 	@Autowired
 	private MemberService memberService;
 	@Autowired
 	private AuthService authService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
 	@PostMapping("/signup")
 	public ResponseEntity<ComResponseDto<IMember>> signUp(@RequestBody SignUpDto signUpDto) {
@@ -43,21 +49,16 @@ public class SessionSignRestController {
 
 	@PostMapping("/signin")
 	public ResponseEntity<ComResponseDto<Boolean>> signin(@RequestBody SignInDto signInDto
-		, HttpSession session) throws LoginException {
-		Boolean isSign = this.authService.signMember(signInDto);
-		if ( isSign ) {
-			// 정상적으로 로그인(사인인) 되면 쿠키를 클라이언트로 응답한다.
-			// 이 클라이언트 해당 세션ID와 쿠키를 가지고 다음에 계속 요청한다.
-			session.setAttribute("MJC_LOGIN", signInDto.getSignId());
-            session.setMaxInactiveInterval(3600);
-			return ResponseEntity.status(200).body(
-					ComResponseDto.make(ResponseCode.SUCCESS, isSign)
-			);
-		} else {
-			return ResponseEntity.status(500).body(
-					ComResponseDto.make(ResponseCode.AUTHENTICATION_ERROR, isSign)
-			);
-		}
+            , HttpSession session) {
+        Authentication auth = this.authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(signInDto.getSignId(), signInDto.getPassword())
+        );
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        session.setAttribute("MJC_LOGIN", signInDto.getSignId());
+        session.setMaxInactiveInterval(1200);
+        return ResponseEntity.status(200).body(
+                ComResponseDto.make(ResponseCode.SUCCESS, true)
+        );
 	}
 
 	@GetMapping("/signout")
