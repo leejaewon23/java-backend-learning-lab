@@ -93,6 +93,6 @@ public interface IMember extends UserDetails {
 
     @Override
     default String getUsername() {
-        return this.getUsername();
+        return this.getSignId();
     }
 }

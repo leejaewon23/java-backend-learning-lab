@@ -26,14 +26,16 @@ public class LJWAuthenticationFilter extends OncePerRequestFilter {
             , HttpServletResponse response
             , FilterChain filterChain) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Object signObj = session.getAttribute("MJC_LOGIN");
-        if ( signObj instanceof String signId) {
-            MemberDto find = this.memberService.findById(signId);
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                    find, null, find.getAuthorities()
-            );
-            SecurityContextHolder.getContext().setAuthentication(auth);
-        }
+		Object signObj = session.getAttribute("MJC_LOGIN");
+		if ( signObj instanceof String signId) {
+			MemberDto find = this.memberService.findBySignId(signId);
+			if ( find != null ) {
+				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+						find, null, find.getAuthorities()
+				);
+				SecurityContextHolder.getContext().setAuthentication(auth);
+			}
+		}
         filterChain.doFilter(request, response);
 
     }
