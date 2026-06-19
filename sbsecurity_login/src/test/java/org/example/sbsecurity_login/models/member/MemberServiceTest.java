@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.junit.jupiter.api.AfterEach;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -70,6 +71,19 @@ class MemberServiceTest {
         Method getDeleteDt = MemberDto.class.getMethod("getDeleteDt");
         assertThat(getDeleteId.invoke(result)).isEqualTo("admin01");
         assertThat(getDeleteDt.invoke(result)).isNotNull();
+    }
+
+    @Test
+    void findAllReturnsOnlyMembersNotDeleted() {
+        MemberEntity activeMember = member(10L, "active01");
+        MemberEntity deletedMember = member(11L, "deleted01");
+        deletedMember.setDeleteId("admin01");
+        deletedMember.setDeleteDt(LocalDateTime.now());
+        when(memberJpaRepository.findAll()).thenReturn(List.of(activeMember, deletedMember));
+
+        List<MemberDto> result = memberService.findAll();
+
+        assertThat(result).extracting(MemberDto::getSignId).containsExactly("active01");
     }
 
     private MemberEntity member(Long id, String signId) {

@@ -83,7 +83,9 @@ public class MemberService implements UserDetailsService {
 	}
 
 	public List<MemberDto> findAll() {
-		List<MemberEntity> all = this.memberJpaRepository.findAll();
+		List<MemberEntity> all = this.memberJpaRepository.findAll().stream()
+				.filter(member -> member.getDeleteId() == null && member.getDeleteDt() == null)
+				.toList();
 		List<MemberDto> result = this.transfer(all);
 		return result;
 	}

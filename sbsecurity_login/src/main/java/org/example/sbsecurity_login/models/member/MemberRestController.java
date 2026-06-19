@@ -52,6 +52,7 @@ public class MemberRestController {
 	}
 
 	@GetMapping("")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<ComResponseDto<List<MemberDto>>> findAll() {
 		List<MemberDto> result = this.memberService.findAll();
 		return ResponseEntity.status(200).body(
