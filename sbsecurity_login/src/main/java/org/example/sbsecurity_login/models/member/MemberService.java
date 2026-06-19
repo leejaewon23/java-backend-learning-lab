@@ -48,10 +48,20 @@ public class MemberService implements UserDetailsService {
 	public MemberDto update(MemberDto updateDto) {
 		MemberEntity find = this.memberJpaRepository.findById(updateDto.getId()).orElseThrow();
 		MemberEntity memberEntity = (MemberEntity)new MemberEntity().clone(find, true);
+		memberEntity.setUpdateDt(LocalDateTime.now());
 		memberEntity.clone(updateDto, false);
 		MemberEntity saved = this.memberJpaRepository.save(memberEntity);
 		MemberDto result = (MemberDto)new MemberDto().clone(saved, true);
 		return result;
+	}
+
+	public boolean isSignedMemberId(Long memberId, String signId) {
+		if ( memberId == null || signId == null ) {
+			return false;
+		}
+		return this.memberJpaRepository.findById(memberId)
+				.map(member -> signId.equals(member.getSignId()))
+				.orElse(false);
 	}
 
 	public List<MemberDto> findAll() {

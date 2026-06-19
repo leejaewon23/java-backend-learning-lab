@@ -24,6 +24,15 @@ public class MemberRestController {
 		);
 	}
 
+	@PatchMapping("")
+	@PreAuthorize("hasAuthority('ADMIN') or @memberService.isSignedMemberId(#updateDto.id, principal.signId)")
+	public ResponseEntity<ComResponseDto<MemberDto>> update(@RequestBody MemberDto updateDto) {
+		MemberDto result = this.memberService.update(updateDto);
+		return ResponseEntity.status(200).body(
+			ComResponseDto.make(ResponseCode.SUCCESS, result)
+		);
+	}
+
 	@GetMapping("")
 	public ResponseEntity<ComResponseDto<List<MemberDto>>> findAll() {
 		List<MemberDto> result = this.memberService.findAll();

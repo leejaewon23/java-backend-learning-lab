@@ -17,4 +17,15 @@ class MemberRestControllerSecurityTest {
         assertThat(preAuthorize).isNotNull();
         assertThat(preAuthorize.value()).isEqualTo("hasAuthority('ADMIN')");
     }
+
+    @Test
+    void updateAllowsAdminOrSameMemberOnly() throws NoSuchMethodException {
+        Method method = MemberRestController.class.getMethod("update", MemberDto.class);
+
+        PreAuthorize preAuthorize = method.getAnnotation(PreAuthorize.class);
+
+        assertThat(preAuthorize).isNotNull();
+        assertThat(preAuthorize.value())
+                .isEqualTo("hasAuthority('ADMIN') or @memberService.isSignedMemberId(#updateDto.id, principal.signId)");
+    }
 }
