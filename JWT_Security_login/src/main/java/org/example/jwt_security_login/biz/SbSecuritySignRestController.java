@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.example.jwt_security_login.common.ComResponseDto;
 import org.example.jwt_security_login.common.ResponseCode;
+import org.example.jwt_security_login.jwt.JWTUtils;
+import org.example.jwt_security_login.models.auth.AuthTokenDto;
 import org.example.jwt_security_login.models.auth.SignInDto;
 import org.example.jwt_security_login.models.auth.SignUpDto;
 import org.example.jwt_security_login.models.member.IMember;
@@ -21,50 +23,51 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 public class SbSecuritySignRestController {
-	@Autowired
-	private MemberService memberService;
-	@Autowired
-	private AuthService authService;
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private AuthService authService;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private JWTUtils jwtUtils;
 
-	@PostMapping("/signup")
-	public ResponseEntity<ComResponseDto<IMember>> signUp(@RequestBody SignUpDto signUpDto) {
-		MemberDto memberDto = (MemberDto)new MemberDto().clone(signUpDto, true);
-		MemberDto inserted = this.memberService.insert(memberDto, false);
-		return ResponseEntity.status(201).body(
-				ComResponseDto.make(ResponseCode.SUCCESS, inserted)
-		);
-	}
+    @PostMapping("/signup")
+    public ResponseEntity<ComResponseDto<IMember>> signUp(@RequestBody SignUpDto signUpDto) {
+        MemberDto memberDto = (MemberDto)new MemberDto().clone(signUpDto, true);
+        MemberDto inserted = this.memberService.insert(memberDto, false);
+        return ResponseEntity.status(201).body(
+                ComResponseDto.make(ResponseCode.SUCCESS, inserted)
+        );
+    }
 
-	@GetMapping("/emailtest/{id}")
-	public ResponseEntity<ComResponseDto<MemberDto>> emailTest(@PathVariable String id) {
-		MemberDto find = this.memberService.findById(id);
-		return ResponseEntity.status(200).body(
-				ComResponseDto.make(ResponseCode.SUCCESS, find)
-		);
-	}
-
-
-	@PostMapping("/signin")
-	public ResponseEntity<ComResponseDto<Boolean>> signin(@RequestBody SignInDto signInDto
+    @PostMapping("/signin")
+    public ResponseEntity<ComResponseDto<AuthTokenDto>> signin(@RequestBody SignInDto signInDto
             , HttpSession session) {
         Authentication auth = this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(signInDto.getSignId(), signInDto.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(auth);
-        session.setAttribute("MJC_LOGIN", signInDto.getSignId());
-        session.setMaxInactiveInterval(1200);
+//		session.setAttribute("MJC_LOGIN", signInDto.getSignId());
+//		session.setMaxInactiveInterval(1200);
+
+        String accessToken = this.jwtUtils.generateAccessToken(signInDto.getSignId());
+        String refreshToken = this.jwtUtils.generateRefreshToken(signInDto.getSignId());
+
+//		MemberDto signMember = this.memberService.findBySignId(signInDto.getSignId());
+//		String accessToken = jwtUtils.generateToken(signMember);
+
+        AuthTokenDto authTokenDto = new AuthTokenDto(accessToken, refreshToken);
+        return ResponseEntity.status(200).body(
+                ComResponseDto.make(ResponseCode.SUCCESS, authTokenDto)
+        );
+    }
+
+    @GetMapping("/signout")
+    public ResponseEntity<ComResponseDto<Boolean>> signout(HttpSession session) {
+        session.invalidate();
         return ResponseEntity.status(200).body(
                 ComResponseDto.make(ResponseCode.SUCCESS, true)
         );
-	}
-
-	@GetMapping("/signout")
-	public ResponseEntity<ComResponseDto<Boolean>> signout(HttpSession session) {
-		session.invalidate();
-		return ResponseEntity.status(200).body(
-				ComResponseDto.make(ResponseCode.SUCCESS, true)
-		);
-	}
+    }
 }

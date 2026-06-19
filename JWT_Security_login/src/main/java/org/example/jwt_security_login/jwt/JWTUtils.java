@@ -1,0 +1,55 @@
+package org.example.jwt_security_login.jwt;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.example.jwt_security_login.models.member.IMember;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
+import java.util.Date;
+
+@Component
+public class JWTUtils {
+//    @Value("${myapp.jwt.secret}")
+    private String secret = "thisismyjwtsecretkey!123456abcdef";
+//    @Value("${myapp.jwt.secret}")
+    private Long expireAccessToken = 1800000L; // 30분
+    private Long expireRefreshToken = 604800000L; // 7일
+
+    private final SecretKey secretKey;
+
+    public JWTUtils() {
+        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
+    }
+
+    public String generateAccessToken(String value) {
+        return this.generateToken(value, this.expireAccessToken);
+    }
+
+    public String generateRefreshToken(String value) {
+        return this.generateToken(value, this.expireRefreshToken);
+    }
+
+    public String generateToken(String value, Long milliSeconds) {
+        String str = Jwts.builder()
+                .subject(value)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + milliSeconds))
+                .signWith(this.secretKey)
+                .compact();
+        return str;
+    }
+
+    public String generateToken(IMember member, Long milliSeconds) {
+        String str = Jwts.builder()
+                .subject(member.getSignId())
+                .claim("role", member.getRole())
+                .claim("email", member.getEmail())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + milliSeconds))
+                .signWith(this.secretKey)
+                .compact();
+        return str;
+    }
+}
