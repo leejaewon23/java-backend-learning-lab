@@ -42,7 +42,13 @@ public class MemberService implements UserDetailsService {
 	}
 
 	public MemberDto findById(String id) {
-		MemberEntity findById = this.memberJpaRepository.findById(Long.parseLong(id)).orElseThrow();
+		return this.findById(Long.parseLong(id));
+	}
+
+	public MemberDto findById(Long id) {
+		MemberEntity findById = this.memberJpaRepository.findById(id)
+				.filter(member -> member.getDeleteId() == null && member.getDeleteDt() == null)
+				.orElseThrow();
 		MemberDto result = (MemberDto)new MemberDto().clone(findById, true);
 		return result;
 	}

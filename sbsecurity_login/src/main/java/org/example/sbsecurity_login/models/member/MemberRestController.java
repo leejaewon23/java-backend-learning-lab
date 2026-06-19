@@ -42,6 +42,15 @@ public class MemberRestController {
 		);
 	}
 
+	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('ADMIN') or @memberService.isSignedMemberId(#id, principal.signId)")
+	public ResponseEntity<ComResponseDto<MemberDto>> findById(@PathVariable Long id) {
+		MemberDto result = this.memberService.findById(id);
+		return ResponseEntity.status(200).body(
+			ComResponseDto.make(ResponseCode.SUCCESS, result)
+		);
+	}
+
 	@GetMapping("")
 	public ResponseEntity<ComResponseDto<List<MemberDto>>> findAll() {
 		List<MemberDto> result = this.memberService.findAll();
