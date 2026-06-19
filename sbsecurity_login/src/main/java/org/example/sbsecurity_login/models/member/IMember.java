@@ -38,6 +38,9 @@ public interface IMember extends UserDetails {
 	LocalDateTime getUpdateDt();
 	void setUpdateDt(LocalDateTime updateDt);
 
+	String getDeleteId();
+	void setDeleteId(String deleteId);
+
 	LocalDateTime getDeleteDt();
 	void setDeleteDt(LocalDateTime deleteDt);
 
@@ -71,6 +74,9 @@ public interface IMember extends UserDetails {
 		}
 		if ( bForced || source.getUpdateDt() != null ) {
 			this.setUpdateDt(source.getUpdateDt());
+		}
+		if ( bForced || source.getDeleteId() != null ) {
+			this.setDeleteId(source.getDeleteId());
 		}
 		if ( bForced || source.getDeleteDt() != null ) {
 			this.setDeleteDt(source.getDeleteDt());

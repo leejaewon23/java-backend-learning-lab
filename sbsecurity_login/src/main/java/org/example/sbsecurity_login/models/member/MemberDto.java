@@ -20,5 +20,6 @@ public class MemberDto implements IMember {
 	private String validText;
 	private LocalDateTime createDt;
 	private LocalDateTime updateDt;
+	private String deleteId;
 	private LocalDateTime deleteDt;
 }

@@ -3,6 +3,8 @@ package org.example.sbsecurity_login.models.member;
 import org.example.sbsecurity_login.common.Util;
 import org.example.sbsecurity_login.models.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -64,6 +66,16 @@ public class MemberService implements UserDetailsService {
 				.orElse(false);
 	}
 
+	public MemberDto deleteById(Long id) {
+		MemberEntity find = this.memberJpaRepository.findById(id).orElseThrow();
+		MemberEntity memberEntity = (MemberEntity)new MemberEntity().clone(find, true);
+		memberEntity.setDeleteId(this.getSignedSignId());
+		memberEntity.setDeleteDt(LocalDateTime.now());
+		MemberEntity saved = this.memberJpaRepository.save(memberEntity);
+		MemberDto result = (MemberDto)new MemberDto().clone(saved, true);
+		return result;
+	}
+
 	public List<MemberDto> findAll() {
 		List<MemberEntity> all = this.memberJpaRepository.findAll();
 		List<MemberDto> result = this.transfer(all);
@@ -85,6 +97,18 @@ public class MemberService implements UserDetailsService {
 		} else {
 			return null;
 		}
+	}
+
+	private String getSignedSignId() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if ( authentication == null ) {
+			return null;
+		}
+		Object principal = authentication.getPrincipal();
+		if ( principal instanceof IMember signedMember ) {
+			return signedMember.getSignId();
+		}
+		return authentication.getName();
 	}
 
     @Override

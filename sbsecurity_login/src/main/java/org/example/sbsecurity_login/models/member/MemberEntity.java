@@ -41,6 +41,9 @@ public class MemberEntity implements IMember {
 	@Column(name = "update_dt")
 	private LocalDateTime updateDt;
 
+	@Column(name = "delete_id", length = 20)
+	private String deleteId;
+
 	@Column(name = "delete_dt")
 	private LocalDateTime deleteDt;
 }

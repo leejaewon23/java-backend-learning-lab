@@ -36,5 +36,8 @@ public class SignUpDto implements IMember {
 	private LocalDateTime updateDt;
 
 	@JsonIgnore
+	private String deleteId;
+
+	@JsonIgnore
 	private LocalDateTime deleteDt;
 }

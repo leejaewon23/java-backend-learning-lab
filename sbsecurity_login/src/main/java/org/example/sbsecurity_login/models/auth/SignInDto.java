@@ -32,5 +32,7 @@ public class SignInDto implements IMember {
 	@JsonIgnore
 	private LocalDateTime updateDt;
 	@JsonIgnore
+	private String deleteId;
+	@JsonIgnore
 	private LocalDateTime deleteDt;
 }
